@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Бронирование столика</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .booking-form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+
+        .booking-form h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input, button {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #28a745;
+            color: white;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="booking-form">
+        <h2>Бронирование столика</h2>
+        <label for="name">Ваше имя:</label>
+        <input type="text" id="name" placeholder="Введите имя" required>
+
+        <label for="date">Дата бронирования:</label>
+        <input type="date" id="date" required>
+
+        <label for="time">Время:</label>
+        <input type="time" id="time" required>
+
+        <label for="guests">Количество гостей:</label>
+        <input type="number" id="guests" min="1" placeholder="Введите количество гостей" required>
+
+        <button onclick="submitBooking()">Забронировать</button>
+    </div>
+
+    <script>
+        function submitBooking() {
+            const name = document.getElementById("name").value;
+            const date = document.getElementById("date").value;
+            const time = document.getElementById("time").value;
+            const guests = document.getElementById("guests").value;
+
+            if (name && date && time && guests) {
+                const message = `📅 Бронирование столика:\n👤 Имя: ${name}\n📆 Дата: ${date}\n⏰ Время: ${time}\n👥 Количество гостей: ${guests}`;
+                sendMessageToTelegram(message);
+            } else {
+                alert("Пожалуйста, заполните все поля!");
+            }
+        }
+
+        function sendMessageToTelegram(message) {
+            const botToken = "7485927177:AAGcwChdDC6_YX-UBIOhZF5BoDVAonX_SN0"; // Ваш токен
+            const chatId = "7309059671"; // Ваш Chat ID
+            const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+
+            fetch(url, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ chat_id: chatId, text: message })
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert("Бронирование успешно отправлено!");
+                } else {
+                    alert("Ошибка отправки данных.");
+                }
+            })
+            .catch(error => {
+                alert("Ошибка: " + error.message);
+            });
+        }
+    </script>
+</body>
+</html>
